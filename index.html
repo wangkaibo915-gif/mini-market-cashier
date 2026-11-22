@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Касса мини-маркета · Практическое задание</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --navy:#10243c; --blue:#245a9b; --teal:#0e8fa1; --aqua:#59c7d7;
+      --ink:#14243a; --mute:#4e6177; --soft:#e8f0f6; --pale:#f7f9fc;
+      --line:#c7d5e3; --code:#132238;
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--pale); color:var(--ink);
+      font-family:"Times New Roman","Liberation Serif",serif; font-size:19px; line-height:1.5; }
+    header { background:var(--navy); color:white; padding:35px max(24px, calc((100vw - 1070px)/2)); }
+    h1 { font-size:42px; line-height:1.17; margin:0 0 9px; }
+    header p { margin:0; color:#d4e8f6; font-size:23px; }
+    main { max-width:1120px; margin:auto; padding:34px 24px 90px; }
+    h2 { font-size:31px; color:var(--navy); margin:0 0 13px; }
+    h3 { font-size:24px; color:var(--blue); margin:18px 0 8px; }
+    p { margin:0 0 13px; }
+    .intro { border-left:4px solid var(--aqua); padding:3px 0 3px 18px; margin-bottom:29px; }
+    .small { font-family:"Noto Sans",Arial,sans-serif; font-size:14px; color:var(--mute); }
+    .layout { display:grid; grid-template-columns:minmax(0,1fr) minmax(310px,0.9fr);
+      gap:28px; align-items:start; }
+    section { min-width:0; }
+    .paper { background:white; border:1px solid var(--line); border-radius:11px;
+      padding:25px 27px; box-shadow:0 4px 18px #10243c0b; }
+    .paper + .paper { margin-top:24px; }
+    .table { width:100%; border-collapse:collapse; }
+    .table th { background:var(--soft); color:var(--navy); text-align:left; }
+    .table th,.table td { padding:10px 12px; border-bottom:1px solid var(--line); }
+    .table th:nth-child(n+2),.table td:nth-child(n+2) { text-align:right; }
+    form { display:grid; gap:14px; }
+    label { display:block; font-family:"Noto Sans",Arial,sans-serif; font-size:15px; }
+    input[type="number"], select { display:block; width:100%; margin-top:5px; border:1px solid #a8b8cb;
+      border-radius:6px; font:19px "Noto Sans",Arial,sans-serif; padding:9px 10px;
+      background:white; color:var(--navy); }
+    input:focus,select:focus { outline:3px solid #59c7d78a; outline-offset:1px; }
+    .check { display:flex; gap:11px; align-items:center; }
+    .check input { width:19px; height:19px; }
+    button { background:var(--blue); color:white; font:600 17px "Noto Sans",Arial,sans-serif;
+      border:0; border-radius:7px; padding:13px 21px; cursor:pointer; }
+    button:hover { background:#1d4778; }
+    button:focus-visible,a:focus-visible { outline:3px solid var(--teal); outline-offset:3px; }
+    pre { white-space:pre-wrap; overflow-wrap:anywhere; background:var(--code);
+      color:#e5f4fa; padding:20px; border-radius:8px; min-height:128px;
+      font:17px/1.5 "Liberation Mono",Consolas,monospace; }
+    code { font-family:"Liberation Mono",Consolas,monospace; color:#234c82; font-size:0.9em; }
+    .examples { display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
+    .examples a { font:14px "Noto Sans",Arial,sans-serif; text-decoration:none;
+      color:var(--blue); border:1px solid #a7c9df; border-radius:6px; padding:8px 11px; }
+    .examples a:hover { background:var(--soft); }
+    ol { padding-left:24px; }
+    li { margin-bottom:9px; }
+    .status { margin-top:10px; color:var(--mute); }
+    footer { margin-top:29px; padding-top:16px; border-top:1px solid var(--line);
+      font:14px "Noto Sans",Arial,sans-serif; color:var(--mute); }
+    @media(max-width:800px) { .layout { grid-template-columns:1fr; }
+      header { padding:29px 24px; } h1 { font-size:34px; } }
+    @media print { body { background:white; } header { print-color-adjust:exact; }
+      .paper { box-shadow:none; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Касса студенческого мини-маркета</h1>
+    <p>Практическое задание по теме «Функции и объекты в JavaScript»</p>
+  </header>
+
+  <main>
+    <div class="intro">
+      <p>Реализуй функцию <code>task(order)</code>, которая проверяет заказ и
+        возвращает объект с его стоимостью или кодом ошибки.</p>
+      <p class="small">Измени только тело функции task и значение LOGIN.
+        Остальная часть страницы предоставлена преподавателем.</p>
+      <h4 id="login">wangkaibo</h4>
+    </div>
+
+    <div class="layout">
+      <section>
+        <div class="paper">
+          <h2>Каталог</h2>
+          <table class="table">
+            <thead><tr><th>Товар</th><th>Цена, ₽</th><th>На складе</th></tr></thead>
+            <tbody>
+              <tr><td>Тетради (<code>notebook</code>)</td><td>250</td><td>8</td></tr>
+              <tr><td>Маркеры (<code>marker</code>)</td><td>90</td><td>12</td></tr>
+              <tr><td>Папки (<code>folder</code>)</td><td>120</td><td>6</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="paper">
+          <h2>Правила</h2>
+          <ol>
+            <li>Количество товара должно быть целым неотрицательным числом.</li>
+            <li>Неизвестные товары, превышение остатка и пустой заказ недопустимы.</li>
+            <li>Промокод <code>STUDENT</code> дает скидку 10%, округленную вниз до рубля.</li>
+            <li>Другие непустые промокоды недопустимы.</li>
+            <li>Самовывоз бесплатен. Доставка стоит 150 ₽, но бесплатна,
+              если сумма <strong>после скидки</strong> не меньше 1000 ₽.</li>
+            <li>Исходный объект заказа нельзя изменять.</li>
+          </ol>
+          <p class="small">Функция возвращает
+            <code>{ok:true,subtotal,discount,delivery,total}</code>
+            либо <code>{ok:false,error}</code>.</p>
+          <p class="small">Коды ошибок:
+            <code>unknown-item</code>,
+            <code>invalid-quantity</code>,
+            <code>out-of-stock</code>,
+            <code>empty-cart</code>,
+            <code>bad-promo</code>.</p>
+        </div>
+      </section>
+
+      <section>
+        <div class="paper">
+          <h2>Оформление заказа</h2>
+          <form method="get" id="orderForm">
+            <label for="notebook">Тетради
+              <input id="notebook" type="number" name="notebook" min="0" step="1" value="0">
+            </label>
+            <label for="marker">Маркеры
+              <input id="marker" type="number" name="marker" min="0" step="1" value="0">
+            </label>
+            <label for="folder">Папки
+              <input id="folder" type="number" name="folder" min="0" step="1" value="0">
+            </label>
+            <label for="promo">Промокод
+              <select id="promo" name="promo">
+                <option value="">Без скидки</option>
+                <option value="STUDENT">STUDENT</option>
+              </select>
+            </label>
+            <label class="check" for="pickup">
+              <input id="pickup" type="checkbox" name="pickup" value="1">
+              Самовывоз
+            </label>
+            <button type="submit">Рассчитать заказ</button>
+          </form>
+        </div>
+
+        <div class="paper">
+          <h2>Результат работы скрипта</h2>
+          <pre id="result" aria-live="polite" aria-label="JSON с результатом расчета"></pre>
+          <p class="status" id="hint">Пока функция task не реализована, показывается код not-implemented.</p>
+          <h3>Открытые примеры</h3>
+          <div class="examples">
+            <a href="?notebook=2&amp;marker=1&amp;promo=STUDENT">Заказ со скидкой</a>
+            <a href="?notebook=4">Бесплатная доставка</a>
+            <a href="?notebook=4&amp;promo=STUDENT">Доставка после скидки</a>
+            <a href="?folder=1&amp;pickup=1">Самовывоз</a>
+            <a href="?notebook=9">Превышение остатка</a>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      Для сдачи задания размести страницу по публичному HTTPS-адресу
+      и отправь ссылку в форум Moodle. Преподаватель будет проверять результат
+      через параметры URL и вызовы <code>window.task(...)</code>.
+    </footer>
+  </main>
+
+  <script>
+    // КАТАЛОГ: НЕ ИЗМЕНЯТЬ
+    const catalog = {
+      notebook: { price: 250, stock: 8 },
+      marker:   { price: 90,  stock: 12 },
+      folder:   { price: 120, stock: 6 }
+    };
+
+    // РЕАЛИЗУЙ ТОЛЬКО ЭТУ ФУНКЦИЮ
+    function task(order) {
+      const items = order.items;
+      let subtotal = 0;
+      let quantityTotal = 0;
+
+      for (const code of Object.keys(items)) {
+        if (!Object.prototype.hasOwnProperty.call(catalog, code)) {
+          return { ok: false, error: "unknown-item" };
+        }
+
+        const quantity = items[code];
+        if (!Number.isInteger(quantity) || quantity < 0) {
+          return { ok: false, error: "invalid-quantity" };
+        }
+        if (quantity > catalog[code].stock) {
+          return { ok: false, error: "out-of-stock" };
+        }
+
+        quantityTotal += quantity;
+        subtotal += quantity * catalog[code].price;
+      }
+
+      if (quantityTotal === 0) {
+        return { ok: false, error: "empty-cart" };
+      }
+      if (order.promo !== "" && order.promo !== "STUDENT") {
+        return { ok: false, error: "bad-promo" };
+      }
+
+      const discount = order.promo === "STUDENT" ? Math.floor(subtotal * 0.1) : 0;
+      const afterDiscount = subtotal - discount;
+      const delivery = order.pickup || afterDiscount >= 1000 ? 0 : 150;
+      return { ok: true, subtotal, discount, delivery, total: afterDiscount + delivery };
+    }
+
+    // ТЕСТОВАЯ ОБОЛОЧКА: НЕ ИЗМЕНЯТЬ
+    window.task = task;
+
+    const params = new URLSearchParams(location.search);
+    const order = {
+      items: {
+        notebook: Number(params.get("notebook") ?? 0),
+        marker: Number(params.get("marker") ?? 0),
+        folder: Number(params.get("folder") ?? 0)
+      },
+      promo: params.get("promo") ?? "",
+      pickup: params.get("pickup") === "1"
+    };
+
+    document.getElementById("notebook").value = String(order.items.notebook);
+    document.getElementById("marker").value = String(order.items.marker);
+    document.getElementById("folder").value = String(order.items.folder);
+    document.getElementById("promo").value = order.promo;
+    document.getElementById("pickup").checked = order.pickup;
+
+    const result = task(order);
+    document.getElementById("result").textContent = JSON.stringify(result, null, 2);
+    if (result && result.error !== "not-implemented") {
+      document.getElementById("hint").textContent =
+        result.ok ? "Заказ рассчитан." : "Обнаружена ошибка заказа.";
+    }
+  </script>
+</body>
+</html>
